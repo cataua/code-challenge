@@ -1,84 +1,71 @@
 <template>
-  <div id="stage"></div>
+  <b-container fluid>
+    <div id="stage">
+      <Stage
+        :color="color"
+        :rotation="rotation"
+        :position="position"
+        :animation="animation"
+        :radius="radius"
+        :colors="colors" />
+    </div>
+    <b-row align-h="center" align-v="center" class="p-3 commands">
+      <b-col>
+        <btn-actions :colors="colors" />
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script>
-import * as THREE from 'three'
+import { EventBus } from './eventBus/event-bus';
+import Colors from './mixins/colors';
+import Stage from './components/Stage';
+import btnActions from './components/btnActions';
 
 export default {
   name: 'App',
+  mixins: [ Colors ],
+  components: {
+    Stage,
+    btnActions,
+  },
   data() {
     return {
-      cube: null,
-      camera: null,
-      renderer: null,
-      scene: null,
+      color: 'gray',
+      rotation: '0 45 0',
+      position: '0 1 -3',
+      animation: null,
+      radius: null,
+      colors: Object,
     }
   },
-  components: {
-  },
   methods: {
-    init() {
-      const stage = document.querySelector('#stage');
-
-      const fov = 75;
-      const aspect = 2;  // the canvas default
-      const near = 0.1;
-      const far = 5;
-      this.camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-      this.camera.position.z = 2;
-
-      this.scene = new THREE.Scene();
-    
-      const color = 0xFFFFFF;
-      const intensity = 1;
-      const light = new THREE.DirectionalLight(color, intensity);
-      light.position.set(-1, 2, 4);
-      this.scene.add(light);
-      
-      const boxWidth = 1;
-      const boxHeight = 1;
-      const boxDepth = 1;
-      const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
-
-      const material = new THREE.MeshPhongMaterial({color: 0xffaa22});  // greenish blue
-
-      this.cube = new THREE.Mesh(geometry, material);
-      this.scene.add(this.cube);
-
-      this.renderer = new THREE.WebGLRenderer({ antialias: true });
-      this.renderer.setSize(stage.clientWidth, stage.clientHeight);
-      stage.appendChild(this.renderer.domElement);
+    defineColorsPallete() {
+      const { warning, info, danger, success } = this.$data;
+      this.colors = { warning, info, danger, success };
+    },
+    pickRandom() {
+      const randomColor = Math.floor(Math.random()*16777215).toString(16);
+      return `#${randomColor}`;
+    },
   },
-  render(time) {
-    time *= 0.001;  // convert time to seconds
-
-    this.cube.rotation.x = time;
-    this.cube.rotation.y = time;
-    this.cube.rotation.z = time;
-
-    this.renderer.render(this.scene, this.camera);
-
-    requestAnimationFrame(this.render);
-  },
-  },
-  mounted() {
-    this.init();
-    requestAnimationFrame(this.render);
+  created() {
+    this.defineColorsPallete();
+    EventBus.$on('update-attributes', ({ elementAttribute, attributeValue }) => {
+      if (attributeValue === 'random') {
+        this[elementAttribute] = this.pickRandom(this.colors);
+      } else {
+        this[elementAttribute] = attributeValue;
+      }
+      }
+    );
   }
 }
 </script>
 
 <style>
-#stage {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin: 0 auto;
-  display: block;
-  height: 100vh;
-  border: 1px solid #000;
+.commands {
+  z-index: 2;
 }
 </style>

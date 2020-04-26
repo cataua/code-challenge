@@ -34,13 +34,17 @@
     </b-button-group>
     <b-button-group size="sm">
       <b-button
-        variant="outline-primary"
-        @click="emitGlobalChangeSolid('cube')">
+        :active="cubeShow"
+        :class="`text-white border-white ${cubeShow ? 'active' : ''}`"
+        variant="outline-warning"
+        @click="emitGlobalChangeSolid('cube', toggleShow('cubeShow', cubeShow))">
           Solid
       </b-button>
       <b-button
-      variant="outline-primary"
-      @click="emitGlobalChangeSolid('model3d')">
+        :active="modelShow"
+        :class="`text-white border-white ${modelShow ? 'active' : ''}`"
+        variant="outline-warning"
+        @click="emitGlobalChangeSolid('model3d', toggleShow('modelShow', modelShow))">
         Model
       </b-button>
     </b-button-group>
@@ -61,11 +65,25 @@ export default {
     return {
       btnValue: null,
       btnColor: null,
+      cubeShow: true,
+      modelShow: true,
     }
   },
   methods: {
+    toggleShow(elSolid, visible) {
+      if (visible) {
+        this[elSolid] = false;
+        return false
+      } else {
+        this[elSolid] = true;
+        return true;
+      }
+    },
     emitGlobalChangeColor(elementAttribute, attributeValue) {
       EventBus.$emit('update-attributes', { elementAttribute, attributeValue });
+    },
+    emitGlobalChangeSolid(solidElement, show) {
+      EventBus.$emit('update-visible-elements', { solidElement, show });
     }
   }
 }

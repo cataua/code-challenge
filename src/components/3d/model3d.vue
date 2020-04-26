@@ -1,11 +1,11 @@
 <template>
   <a-entity
-    :gltf-model="`url(${publicPath}models/3d/dino.glb)`"
-    position="2 0 -1"
-    scale="3 3 3"
+    :gltf-model="`url(${publicPath}models/3d/monkey.glb)`"
+    :position="position3D"
+    scale="0.8 0.8 0.8"
     modify-materials
     material="shader: flat; color: green;"
-    rotation="0 -15 0">
+    rotation="0 -45 0">
   </a-entity>
 </template>
 <script>
@@ -13,18 +13,24 @@
 export default {
   name: 'Model3D',
   props: ['color'],
-  data() {
-    return {
-      publicPath: process.env.BASE_URL,
-    }
-  },
-  methods: {
-    init() {
+  computed: {
+    colorModified() {
+      this.setColor(this.color);
       return true;
     }
   },
-  mounted() {
-    this.init();
+  data() {
+    return {
+      position3D: '0 1.8 -5',
+    }
+  },
+  methods: {
+    setColor(color = 'brown') {
+      console.log(color);
+    },
+  },
+  beforeMounted() {
+    this.init(this.color);
   }
 }
 </script>

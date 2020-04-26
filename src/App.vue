@@ -7,7 +7,8 @@
         :position="position"
         :animation="animation"
         :radius="radius"
-        :colors="colors" />
+        :colors="colors"
+        :visibleElements="visibleElements" />
     </div>
     <b-row align-h="center" align-v="center" class="p-3 commands">
       <b-col>
@@ -35,6 +36,7 @@ export default {
       color: 'gray',
       rotation: '0 45 0',
       position: '0 1 -3',
+      visibleElements: ['cube', 'model3d'],
       animation: null,
       radius: null,
       colors: Object,
@@ -47,7 +49,10 @@ export default {
     },
     pickRandom() {
       const randomColor = Math.floor(Math.random()*16777215).toString(16);
-      return `#${randomColor}`;
+      if (randomColor.length === 6) {
+        return `#${randomColor}`;
+      }
+      this.pickRandom();
     },
   },
   created() {
@@ -58,8 +63,19 @@ export default {
       } else {
         this[elementAttribute] = attributeValue;
       }
-      }
-    );
+      });
+    EventBus.$on('update-visible-elements', (visibleElement) => {
+      let newList = this.visibleElements;
+      const elementIndex = newList.indexOf(visibleElement.solidElement);
+      if (elementIndex === -1 && visibleElement.show) {
+        newList.push(visibleElement.solidElement);
+      } else if (elementIndex !== -1 && !visibleElement.show) {
+        newList = this.visibleElements.filter(el => {
+          return el !== visibleElement.solidElement
+        });
+      } 
+      this.visibleElements = newList;
+    });
   }
 }
 </script>

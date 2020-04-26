@@ -7,16 +7,16 @@ AFRAME.registerComponent('stage-scene', {
   }
 });
 
-
-// AFRAME.registerComponent('modify-materials', {
-//   init: function() {
-//     this.el.addEventListener('model-loaded', () => {
-//       const obj = this.el.getObject3D('mesh');
-//       obj.traverse(node => {
-//         if (node.name == 'BoomBox') {
-//           node.material.color.set(this.color);
-//         }
-//       })
-//     })
-//   }
-// });
+AFRAME.registerComponent('modify-materials', {
+  init: function() {
+    this.el.addEventListener('model-loaded', () => {
+      const obj = this.el.getObject3D('mesh');
+      obj.traverse(node => {
+        if (node.name == 'Monkey') {
+          console.log(this.color);
+          node.material.color.set('brown');
+        }
+      })
+    })
+  }
+});

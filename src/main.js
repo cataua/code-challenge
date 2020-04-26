@@ -20,9 +20,16 @@ Vue.config.ignoredElements = [
   'a-sky',
   'a-sphere',
   'a-cylinder',
-  'a-plane'
+  'a-plane',
+  'a-light',
 ];
-
+Vue.mixin({
+  data: () => {
+    return {
+      publicPath: process.env.BASE_URL,
+    }
+  }
+})
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 

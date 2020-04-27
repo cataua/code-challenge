@@ -38,4 +38,5 @@ This code was development based mainly to adapt the A-Frame to VueJS, where init
 ### Personal site and Linkedin profile
 * https://caetanorama.com
 * https://linkedin.com/in/rogeriocaetano
+* https://github.com/cataua
 

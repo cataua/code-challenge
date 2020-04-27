@@ -1,5 +1,8 @@
 
 module.exports = {
+  publicPath: process.env.NODE_ENV === 'production'
+  ? '/code_challenge'
+  : '/',
   chainWebpack: config => {
     config
     .plugin('html')

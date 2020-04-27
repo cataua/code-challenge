@@ -4,7 +4,7 @@ import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-import './utils/aFrameComponents' // Quando criar os componentes do aframe
+import './utils/aFrameComponents' // Init aFrameComponents
 
 import App from './App.vue'
 
@@ -22,7 +22,7 @@ Vue.config.ignoredElements = [
   'a-cylinder',
   'a-plane',
   'a-light',
-];
+]; // Remove AFrame tags from VueJs Watch
 Vue.mixin({
   data: () => {
     return {

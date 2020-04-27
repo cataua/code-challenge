@@ -28,24 +28,8 @@
       <b-button
         variant="outline-primary"
         class="text-white border-white"
-        @click="emitGlobalChangeTexture(true)">
+        @click="emitGlobalApplyTexture(texturized)">
         Apply texture
-      </b-button>
-    </b-button-group>
-    <b-button-group size="sm">
-      <b-button
-        :active="cubeShow"
-        :class="`text-white border-white ${cubeShow ? 'active' : ''}`"
-        variant="outline-warning"
-        @click="emitGlobalChangeSolid('cube', toggleShow('cubeShow', cubeShow))">
-          Solid
-      </b-button>
-      <b-button
-        :active="modelShow"
-        :class="`text-white border-white ${modelShow ? 'active' : ''}`"
-        variant="outline-warning"
-        @click="emitGlobalChangeSolid('model3d', toggleShow('modelShow', modelShow))">
-        Model
       </b-button>
     </b-button-group>
   </div>
@@ -59,6 +43,11 @@ export default {
       type: Object,
       required: true,
       default: () => {}
+    },
+    texturized: {
+      type: Boolean,
+      required: true,
+      default: () => false,
     }
   },
   data() {
@@ -70,20 +59,11 @@ export default {
     }
   },
   methods: {
-    toggleShow(elSolid, visible) {
-      if (visible) {
-        this[elSolid] = false;
-        return false
-      } else {
-        this[elSolid] = true;
-        return true;
-      }
-    },
     emitGlobalChangeColor(elementAttribute, attributeValue) {
       EventBus.$emit('update-attributes', { elementAttribute, attributeValue });
     },
-    emitGlobalChangeSolid(solidElement, show) {
-      EventBus.$emit('update-visible-elements', { solidElement, show });
+    emitGlobalApplyTexture(isToApplyTexture) {
+      EventBus.$emit('apply-texture', isToApplyTexture);
     }
   }
 }
